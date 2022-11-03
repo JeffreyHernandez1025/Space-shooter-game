@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import deleteHighScore from "../api/deleteHighScore";
+import editHighScore from "../api/editHighScore";
 import getHighScores from "../api/getHighScores";
 
 /**
@@ -45,9 +46,22 @@ export default function useAllHighScores() {
     }
   };
 
+  // makes api req to edit
+  const editScore = async (score, name, kills, id) => {
+    try{
+      await editHighScore(score, name, kills, id);
+      console.log('success, score was edited')
+    }catch(e){
+      console.log(e)
+    }
+  }
   return {
+    // get req
     allScores,
+    // delete req
     deleteScore,
     isDeleting,
+    // put req
+    editScore,
   };
 }

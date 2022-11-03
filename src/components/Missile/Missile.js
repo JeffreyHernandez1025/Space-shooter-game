@@ -1,4 +1,4 @@
-import missile from "../../assets/missile.png";
+import missile from "../../assets/missle.png";
 import { useState, useEffect } from "react";
 
 export default function Missile(props) {

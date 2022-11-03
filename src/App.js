@@ -14,7 +14,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route index element={<Game />} />
-          <Route path="/hi-scores" element={<HighScores />} />
+          <Route path="/highscores" element={<HighScores />} />
           <Route path="*" element={<Navigate to="" />} />
         </Routes>
       </BrowserRouter>

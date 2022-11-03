@@ -6,6 +6,6 @@ import { API_URL } from '../constants';
  * @returns 
  */
 export default function getHighScores(){
-    const url =  API_URL + '/score';
+    const url =  API_URL + '/scores';
     return axios.get(url);
 }
