@@ -2,6 +2,7 @@ import useAllHighScores from "../../hooks/useAllHighScores";
 import styled from "styled-components";
 import bgImg from "../../assets/background.png";
 import { useState } from "react";
+import useEditHighScore from "../../hooks/useEditHighScore";
 
 const PageWrapper = styled.div`
   width: 100vw;
@@ -81,32 +82,31 @@ margin-left: 10px;
 
 export default function HighScores() {
   // text input handles
-const [userId, setUserId] = useState('');
-const [userScore, setUserScore] = useState(0)
-const [userName, setUserName] = useState('')
-const [userKills, setUserKills] = useState(0)
-const [isEditing, setIsEditing] = useState(false)
-const [status, setStatus] = useState('');
+  const [userId, setUserId] = useState('');
+  const [userScore, setUserScore] = useState(0)
+  const [userName, setUserName] = useState('')
+  const [userKills, setUserKills] = useState(0)
   // object destructuring
-  const { allScores, deleteScore, isDeleting, editScore } = useAllHighScores();
+  const { allScores, deleteScore, isDeleting } = useAllHighScores();
+  const { editScore, isEditing, setIsEditing } = useEditHighScore();
   // handling submit
 
-  
-  async function submitEdit(score, name, kills, id){
-   try{
-    id = userId
-    score = userScore
-    name = userName
-    kills = userKills
-    editScore(score, name, kills, id)
-   }catch(e){
-    console.log(e)
-   }
+
+  async function submitEdit(score, name, kills, id) {
+    try {
+      id = userId
+      score = userScore
+      name = userName
+      kills = userKills
+      editScore(score, name, kills, id)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   const handleSubmit = event => {
     console.log('handleSubmit ran');
-    event.preventDefault(); // 👈️ prevent page refresh
+    window.location.reload();
 
     // 👇️ access input values here
     console.log('score 👉️', userScore);
@@ -118,15 +118,15 @@ const [status, setStatus] = useState('');
     setUserId('')
     setUserKills(0)
 
-    setIsEditing(false)
+
     submitEdit()
+    setIsEditing(false)
   };
   return (
     <PageWrapper>
       <Header>Space Shooter Scores</Header>
       {allScores.map((score, i) => (
         <ScoreWrapper key={i}>
-          <p style={{fontSize: 7}}>{score._id}</p>
           <p>{score.name}</p>
           <p>{score.score}</p>
           <p>{score.kills}</p>
@@ -139,41 +139,40 @@ const [status, setStatus] = useState('');
             {isDeleting === true ? "Is Deleting" : "Delete"}
           </DeleteButton>
           <EditButton onClick={() => {
-            console.log('hit edit') 
+            console.log('hit edit')
             setIsEditing(true)
             setUserId(score._id)
             setUserScore(score.score)
             setUserName(score.name)
             setUserKills(score.kills)
           }}> Edit </EditButton>
-          {isEditing === true ? 
-          <form onSubmit={handleSubmit}>
-            <input 
-            id="user_score"
-            name="user_score"
-            type="number"
-            onChange={event => setUserScore(event.target.value)}
-            value={userScore}
-            />
-            <input 
-            id="user_Name"
-            name="user_Name"
-            type="text"
-            onChange={event => setUserName(event.target.value)}
-            value={userName}
-            />
-            <input 
-            id="user_Kills"
-            name="user_Kills"
-            type="number"
-            onChange={event => setUserKills(event.target.value)}
-            value={userKills}
-            />
-            <button type='submit'> Done </button>
-          </form> : null}
+          {isEditing === true ?
+            <form onSubmit={handleSubmit}>
+              <input
+                id="user_score"
+                name="user_score"
+                type="number"
+                onChange={event => setUserScore(event.target.value)}
+                value={userScore}
+              />
+              <input
+                id="user_Name"
+                name="user_Name"
+                type="text"
+                onChange={event => setUserName(event.target.value)}
+                value={userName}
+              />
+              <input
+                id="user_Kills"
+                name="user_Kills"
+                type="number"
+                onChange={event => setUserKills(event.target.value)}
+                value={userKills}
+              />
+              <button type='submit'> Done </button>
+            </form> : null}
         </ScoreWrapper>
       ))}
-      {status && status}
     </PageWrapper>
   );
 }
