@@ -87,7 +87,7 @@ export default function HighScores() {
   const [userName, setUserName] = useState('')
   const [userKills, setUserKills] = useState(0)
   // object destructuring
-  const { allScores, deleteScore, isDeleting } = useAllHighScores();
+  const { allScores, deleteScore, isDeleting, setAllScores } = useAllHighScores();
   const { editScore, isEditing, setIsEditing } = useEditHighScore();
   // handling submit
 
@@ -117,6 +117,7 @@ export default function HighScores() {
     setUserScore(0)
     setUserId('')
     setUserKills(0)
+    setUserName('')
 
 
     submitEdit()
@@ -140,7 +141,10 @@ export default function HighScores() {
           </DeleteButton>
           <EditButton onClick={() => {
             console.log('hit edit')
+            const id = score._id
+            setAllScores(allScores.filter((score) => score._id === id));
             setIsEditing(true)
+            // default the values
             setUserId(score._id)
             setUserScore(score.score)
             setUserName(score.name)

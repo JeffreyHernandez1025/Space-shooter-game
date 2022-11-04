@@ -49,6 +49,7 @@ export default function useAllHighScores() {
   return {
     // get req
     allScores,
+    setAllScores,
     // delete req
     deleteScore,
     isDeleting,
