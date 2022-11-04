@@ -26,12 +26,10 @@ const ScoreWrapper = styled.div`
   background-color: #fff;
   border-radius: 4px;
   padding: 0.5rem 0.5rem;
-  text-align: center;
   width: 275px;
-  height: 70px;
-  margin-bottom: 50px;
   opacity: 0.75;
   transition: all ease-in-out 300ms;
+  display: flex;
   
   p {
     margin: 0;
@@ -41,6 +39,12 @@ const ScoreWrapper = styled.div`
     cursor: pointer;
     opacity: 1;
   }
+`;
+
+const ButtonsContainer = styled.div`
+align-items: center;
+flex: 1;
+align-content: center;
 `;
 
 const Header = styled.h1`
@@ -57,8 +61,8 @@ const DeleteButton = styled.button`
   border-radius: 4px;
   padding: 0.5rem 0.5rem;
   outline: none;
-  border-color: red;
-  border-style: solid;
+  border: none;
+  margin-top: 2.5px;
 
   &:hover {
     cursor: pointer;
@@ -70,15 +74,45 @@ background-color: grey;
 border-radius: 4px;
 padding: 0.5rem 0.5rem;
 outline: none;
-border-color: grey;
-border-style: solid;
-margin-left: 10px;
+border: none;
+align-self: center;
+margin-top: 2.5px;
 
 &:hover {
   cursor: pointer;
 }
 `;
 
+const LeaderBoardWrapper = styled.div`
+display: flex;
+margin-bottom: 20px;
+`;
+
+const Username = styled.p`
+font-weight: bold;
+`
+const KillsContainer = styled.div`
+flex: 1;
+margin-right: 80px;
+`
+const Kills = styled.p`
+float: right;
+`
+
+const Score = styled.p`
+float: right;
+font-weight: bold;
+color: white;
+`
+
+const ScoreContainer = styled.div`
+float: right;
+background-color: blue;
+flex: .1;
+border-radius: 8px;
+padding-left: 10px;
+padding-right: 10px;
+`
 
 export default function HighScores() {
   // text input handles
@@ -127,55 +161,92 @@ export default function HighScores() {
     <PageWrapper>
       <Header>Space Shooter Scores</Header>
       {allScores.map((score, i) => (
-        <ScoreWrapper key={i}>
-          <p>{score.name}</p>
-          <p>{score.score}</p>
-          <p>{score.kills}</p>
-          <DeleteButton
-            onClick={() => {
-              console.log("hit delete");
-              deleteScore(score._id);
-            }}
-          >
-            {isDeleting === true ? "Is Deleting" : "Delete"}
-          </DeleteButton>
-          <EditButton onClick={() => {
-            console.log('hit edit')
-            const id = score._id
-            setAllScores(allScores.filter((score) => score._id === id));
-            setIsEditing(true)
-            // default the values
-            setUserId(score._id)
-            setUserScore(score.score)
-            setUserName(score.name)
-            setUserKills(score.kills)
-          }}> Edit </EditButton>
-          {isEditing === true ?
-            <form onSubmit={handleSubmit}>
-              <input
-                id="user_score"
-                name="user_score"
-                type="number"
-                onChange={event => setUserScore(event.target.value)}
-                value={userScore}
-              />
-              <input
-                id="user_Name"
-                name="user_Name"
-                type="text"
-                onChange={event => setUserName(event.target.value)}
-                value={userName}
-              />
-              <input
-                id="user_Kills"
-                name="user_Kills"
-                type="number"
-                onChange={event => setUserKills(event.target.value)}
-                value={userKills}
-              />
-              <button type='submit'> Done </button>
-            </form> : null}
-        </ScoreWrapper>
+        <LeaderBoardWrapper>
+
+          <ButtonsContainer>
+
+            <DeleteButton
+              onClick={() => {
+                console.log("hit delete");
+                deleteScore(score._id);
+              }}
+            >
+              {isDeleting === true ? "Is Deleting" : "Delete"}
+            </DeleteButton>
+
+          </ButtonsContainer>
+
+          <ScoreWrapper key={i}>
+            <Username>
+
+              {score.name}
+
+            </Username>
+              <KillsContainer>
+              <Kills>
+
+                {score.kills}
+
+              </Kills>
+              </KillsContainer>
+            <ScoreContainer>
+
+              <Score>
+
+                {score.score}
+
+              </Score>
+
+            </ScoreContainer>
+
+          </ScoreWrapper>
+
+          <ButtonsContainer>
+
+            <EditButton onClick={() => {
+              console.log('hit edit')
+              const id = score._id
+              setAllScores(allScores.filter((score) => score._id === id));
+              setIsEditing(true)
+              // default the values
+              setUserId(score._id)
+              setUserScore(score.score)
+              setUserName(score.name)
+              setUserKills(score.kills)
+            }}>
+              Edit
+            </EditButton>
+
+            {isEditing === true ?
+              <form onSubmit={handleSubmit}>
+                <input
+                  id="user_score"
+                  name="user_score"
+                  type="number"
+                  onChange={event => setUserScore(event.target.value)}
+                  value={userScore}
+                />
+                <input
+                  id="user_Name"
+                  name="user_Name"
+                  type="text"
+                  onChange={event => setUserName(event.target.value)}
+                  value={userName}
+                />
+                <input
+                  id="user_Kills"
+                  name="user_Kills"
+                  type="number"
+                  onChange={event => setUserKills(event.target.value)}
+                  value={userKills}
+                />
+                <button type='submit'> Done </button>
+              </form> : null}
+
+          </ButtonsContainer>
+
+        </LeaderBoardWrapper>
+
       ))}
     </PageWrapper>
   );
