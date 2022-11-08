@@ -8,8 +8,10 @@ import editHighScore from "../api/editHighScore";
  * @returns
  */
 export default function useEditHighScore() {
+  // show form
   const [isEditing, setIsEditing] = useState(false)
-
+  // collect data
+  
   // makes api req to edit
   const editScore = async (score, name, kills, id) => {
     try{

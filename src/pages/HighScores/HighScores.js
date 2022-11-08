@@ -3,6 +3,7 @@ import styled from "styled-components";
 import bgImg from "../../assets/background.png";
 import { useState } from "react";
 import useEditHighScore from "../../hooks/useEditHighScore";
+import { redirect } from "react-router-dom";
 
 const PageWrapper = styled.div`
   width: 100vw;
@@ -27,7 +28,7 @@ const ScoreWrapper = styled.div`
   border-radius: 4px;
   padding: 0.5rem 0.5rem;
   width: 275px;
-  opacity: 0.75;
+  opacity: .75;
   transition: all ease-in-out 300ms;
   display: flex;
   
@@ -55,6 +56,17 @@ const Header = styled.h1`
   margin-bottom: 25px;
 `;
 
+const LeaderBoardData = styled.div`
+background-color: purple;
+border-radius: 4px;
+padding: 0.5rem 0.5rem;
+width: 275px;
+transition: all ease-in-out 300ms;
+display: flex;
+margin-bottom: 10px;
+margin-left: 15px;
+`
+
 const DeleteButton = styled.button`
   color: #fff;
   background-color: red;
@@ -63,6 +75,7 @@ const DeleteButton = styled.button`
   outline: none;
   border: none;
   margin-top: 2.5px;
+  float: right;
 
   &:hover {
     cursor: pointer;
@@ -84,35 +97,59 @@ margin-top: 2.5px;
 `;
 
 const LeaderBoardWrapper = styled.div`
-display: flex;
-margin-bottom: 20px;
+margin-bottom: 10px;
 `;
 
 const Username = styled.p`
 font-weight: bold;
 `
 const KillsContainer = styled.div`
-flex: 1;
 margin-right: 80px;
+width: 80px;
 `
 const Kills = styled.p`
-float: right;
+font-weight: bold;
+text-align: center;
+color: red
 `
 
 const Score = styled.p`
-float: right;
 font-weight: bold;
 color: white;
-`
-
-const ScoreContainer = styled.div`
-float: right;
+display: inline;
 background-color: blue;
-flex: .1;
 border-radius: 8px;
 padding-left: 10px;
 padding-right: 10px;
 `
+
+const ScoreContainer = styled.div`
+flex: 1;
+justify-content: right;
+`
+const FormWrapper = styled.div`
+display: flex;
+flex-direction: column;
+`
+const SubmitButton = styled.button`
+color: dark-green;
+background-color: lime;
+border-radius: 4px;
+padding: 0.5rem 0.5rem;
+outline: none;
+border: none;
+align-self: center;
+margin-top: 2.5px;
+
+&:hover {
+  cursor: pointer;
+}
+`
+const SubmitButtonWrapper = styled.div`
+display: flex;
+justify-content: center;
+`
+
 
 export default function HighScores() {
   // text input handles
@@ -124,7 +161,6 @@ export default function HighScores() {
   const { allScores, deleteScore, isDeleting, setAllScores } = useAllHighScores();
   const { editScore, isEditing, setIsEditing } = useEditHighScore();
   // handling submit
-
 
   async function submitEdit(score, name, kills, id) {
     try {
@@ -160,9 +196,35 @@ export default function HighScores() {
   return (
     <PageWrapper>
       <Header>Space Shooter Scores</Header>
+      {isEditing === false ?
+      <LeaderBoardData>
+        <p style={{ margin: 0, 
+          marginLeft: 10, 
+          fontWeight: "bold", 
+          color: 'white' }}>
+          name
+        </p>
+        <p style={{ 
+          margin: 0, 
+          width: 81, 
+          textAlign: 'center', 
+          fontWeight: "bold", 
+          color: "red" }}>
+          kills
+        </p>
+        <p style={{
+          margin: 0, 
+          marginLeft: 88, 
+          color: 'white', 
+          fontWeight: 'bold',
+          display: 'inline',
+        }}>
+          score
+        </p>
+      </LeaderBoardData> : null}
       {allScores.map((score, i) => (
         <LeaderBoardWrapper>
-
+              <div style={{display: 'flex',}}>
           <ButtonsContainer>
 
             <DeleteButton
@@ -171,7 +233,7 @@ export default function HighScores() {
                 deleteScore(score._id);
               }}
             >
-              {isDeleting === true ? "Is Deleting" : "Delete"}
+              {isDeleting === true ? "Deleting.." : "Delete"}
             </DeleteButton>
 
           </ButtonsContainer>
@@ -182,13 +244,13 @@ export default function HighScores() {
               {score.name}
 
             </Username>
-              <KillsContainer>
+            <KillsContainer>
               <Kills>
 
                 {score.kills}
 
               </Kills>
-              </KillsContainer>
+            </KillsContainer>
             <ScoreContainer>
 
               <Score>
@@ -216,17 +278,12 @@ export default function HighScores() {
             }}>
               Edit
             </EditButton>
-
-            {isEditing === true ?
+           
+          </ButtonsContainer>
+          </div>
+ {isEditing === true ?
               <form onSubmit={handleSubmit}>
-                <input
-                  id="user_score"
-                  name="user_score"
-                  type="number"
-                  onChange={event => setUserScore(event.target.value)}
-                  value={userScore}
-                />
-                <input
+              <input
                   id="user_Name"
                   name="user_Name"
                   type="text"
@@ -240,11 +297,17 @@ export default function HighScores() {
                   onChange={event => setUserKills(event.target.value)}
                   value={userKills}
                 />
-                <button type='submit'> Done </button>
+                <input
+                  id="user_score"
+                  name="user_score"
+                  type="number"
+                  onChange={event => setUserScore(event.target.value)}
+                  value={userScore}
+                />
+                <SubmitButtonWrapper>
+                <SubmitButton type='submit'> Done </SubmitButton>
+                </SubmitButtonWrapper>
               </form> : null}
-
-          </ButtonsContainer>
-
         </LeaderBoardWrapper>
 
       ))}
